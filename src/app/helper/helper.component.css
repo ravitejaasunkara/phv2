@@ -1,0 +1,33 @@
+.main,table{
+    border: 1px solid black;
+    padding: 12px;
+}
+.input-box{
+    display: flex;
+    flex-direction: column;
+}
+.product-page{
+    border: 1px solid black;
+    padding: 24px;
+}
+.dropdown-selections-pages{
+    padding: 24px;
+}
+li{
+    list-style: none;
+}
+#productFirstPage{
+    min-height: 90vh;
+    background-color:burlywood;
+    border-radius: 8px;
+    margin-top: 34px;
+    padding: 12px;
+    margin-bottom: 34px;
+}
+a{
+    transition: transform 0.1s ease;
+}
+a:hover{
+    color: red;
+    transform: scale(1.1);
+}

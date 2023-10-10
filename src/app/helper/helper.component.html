@@ -1,0 +1,425 @@
+<div class="main">
+    <h1>Product Helper</h1>
+    <hr />
+    <a (click)="gotohome()" href="javascript:void(0)">Finder</a>
+    <div *ngIf="hideSearchPageOnceClickedAndNavigatedToProductData">
+        <h6>Search for Products</h6>
+        <div class="input-box">
+            SKU/ISBN/TITLE : <input type="text" [(ngModel)]="enteredTextInSkuIsbnTitleInputField" class="form-control"
+                (ngModelChange)="searchForProductWithEnteredKeyword()">
+        </div>
+        <button style="margin-top: 12px;" (click)="productSearch()">Search</button>
+        <div *ngIf="productDataAvailable" class="search-result" style="padding-top: 24px;">
+            <div *ngFor="let item of productData" class="search-box">
+                <div class="details-div" style="width:200px;min-height:
+                        200px;background-color: azure;border-radius:
+                        12px;margin-bottom: 12px;padding: 12px;">
+                    <li>Action: <a href="javascript:void(0);"
+                            (click)="enableProductPageWithProductData(item.title,item.isbn,item.sku)">Select</a></li>
+                    <li>versionType:<p>{{item.versionType}}</p>
+                    </li>
+                    <li>SKU:<p>{{item.sku}}</p>
+                    </li>
+                    <li>ISBN:<p>{{item.isbn}}</p>
+                    </li>
+                    <li>Title:<p>{{item.title}}</p>
+                    </li>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="search_results_empty">
+            <h6>No product data available seems like isbn or title or sku invalid</h6>
+        </div>
+    </div>
+</div>
+<section class="product-page" *ngIf="showProductPage">
+    <div class="product-main-page">
+        <div class="dropdown">
+            <h4 style="color: white;background-color: black;text-align:center;">
+                {{productPageISBN}}-{{productPageSKN}}-{{productPageTitle}}</h4>
+            <select [(ngModel)]="productpageDropdownSelectedValue" (ngModelChange)="productpageDropdownChanged()">
+                <option *ngFor="let item of dropdownArrayValues" [value]="item">{{item}}</option>
+            </select>
+        </div>
+    </div>
+</section>
+<div class="dropdown-selections-pages">
+    <div class="productData" *ngIf="product_data" id="productFirstPage">
+        <p>name : {{product_data_arr[0]?.name}}</p>
+        <p>title : {{product_data_arr[0]?.title}}</p>
+        <p>sub title : {{product_data_arr[0]?.subTitle}}</p>
+        <p>sku : {{product_data_arr[0]?.sku}}</p>
+        <p>isbn 10 : {{product_data_arr[0]?.isbn10}}</p>
+        <p>isbn : {{product_data_arr[0]?.isbn}}</p>
+        <p>Project No : {{product_data_arr[0]?.projectNo}}</p>
+        <p>Id : {{product_data_arr[0]?.id}}</p>
+        <p>ownership : {{product_data_arr[0]?.ownership}}</p>
+        <p>version type : {{product_data_arr[0]?.versionType}}</p>
+        <p>binding Style : {{product_data_arr[0]?.bindingStyle}}</p>
+        <p>sub group : {{product_data_arr[0]?.subGroup}}</p>
+        <p>sales eval : {{product_data_arr[0]?.salesEval}}</p>
+        <p>imprint : {{product_data_arr[0]?.imprint}}</p>
+        <p>publisher : {{product_data_arr[0]?.publisher}}</p>
+        <p>description : {{product_data_arr[0]?.metatags}}</p>
+        <p>features : {{product_data_arr[0].features}}</p>
+        <p>reviews : {{product_data_arr[0].reviews}}</p>
+        <p>gt update : {{product_data_arr[0].gtUpdate}}</p>
+        <p>pub date : {{product_data_arr[0].pubDate}}</p>
+        <p>copy right : {{product_data_arr[0].copyRight}}</p>
+        <p>home disocunt code : {{product_data_arr[0].homeDiscountCode}}</p>
+        <p>Edition No : {{product_data_arr[0].editionNo}}</p>
+        <p>Pages : {{product_data_arr[0].pages}}</p>
+        <p>Is Best Seller : {{product_data_arr[0].isBestSeller}}</p>
+    </div>
+    <div *ngIf="product_data_empty">
+        <h3>No product data available.</h3>
+    </div>
+    <div class="filterData" *ngIf="filter_data">
+
+    </div>
+    <div class="categoriesData" *ngIf="categories_data" id="productFirstPage">
+        <h3>Categories</h3>
+        <table>
+            <thead>
+                <th>id</th>
+                <th>code</th>
+                <th>title</th>
+                <th>parent id</th>
+                <th>parent code</th>
+                <th>parent title</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of categories_data_arr">
+                    <td>{{item.id}}</td>
+                    <td>{{item.code}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.parentId}}</td>
+                    <td>{{item.parentCode}}</td>
+                    <td>{{item.parentTitle}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="categories_data_empty">
+        <h3>No categories data available.</h3>
+    </div>
+    <div class="classificationsData" *ngIf="classifications_data" id="productFirstPage">
+        <h3>Classifications</h3>
+        <table>
+            <thead>
+                <th>id</th>
+                <th>code</th>
+                <th>value</th>
+                <th>priority</th>
+                <th>fixed part</th>
+                <th>variable part</th>
+                <th>level</th>
+                <th>sequence</th>
+                <th>text</th>
+                <th>value string</th>
+                <th>date created</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of classification_data_arr">
+                    <td>{{item.id}}</td>
+                    <td>{{item.code}}</td>
+                    <td>{{item.value}}</td>
+                    <td>{{item.priority}}</td>
+                    <td>{{item.fixedPart}}</td>
+                    <td>{{item.variablePart}}</td>
+                    <td>{{item.level}}</td>
+                    <td>{{item.sequence}}</td>
+                    <td>{{item.text}}</td>
+                    <td>{{item.valueString}}</td>
+                    <td>{{item.dateCreated}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="classification_data_empty">
+        <h3>No classifications data available.</h3>
+    </div>
+    <div class="downloadsData" *ngIf="downloads_data">
+        <div *ngFor="let item of downloads_data_arr">
+            <table>
+                <thead>
+                    <th>Id</th>
+                    <th>Subtitle</th>
+                    <th>Platform</th>
+                    <th>filename</th>
+                    <th>Instruction</th>
+                    <th>Last update</th>
+                </thead>
+                <tbody>
+                    <td>{{item.id}}</td>
+                    <td>{{item.subtitle}}</td>
+                    <td>{{item.platform}}</td>
+                    <td>{{item.filename}}</td>
+                    <td>{{item.instruction}}</td>
+                    <td>{{item.lastUpdate}}</td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="downloads_data_empty">
+        <h3>No downloads data available</h3>
+    </div>
+    <div class="imprintsData" *ngIf="imprints_data">
+        <div>
+            <h3>Imprints & Publishers</h3>
+            <table>
+                <thead>
+                    <th>ID</th>
+                    <th>CODE</th>
+                    <th>DESCRIPTION</th>
+                    <th>IMAGE</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>IMPR : {{imprints_data_arr.imprint?.id}}</td>
+                        <td>{{imprints_data_arr.imprint?.code}}</td>
+                        <td>{{imprints_data_arr.imprint?.description}}</td>
+                        <td>{{imprints_data_arr.imprint?.image}}</td>
+                    </tr>
+                    <tr>
+                        <td>PUBLISHER : {{imprints_data_arr.imprint?.id}}</td>
+                        <td>{{imprints_data_arr.publisher?.code}}</td>
+                        <td>{{imprints_data_arr.publisher?.description}}</td>
+                        <td>{{imprints_data_arr.publisher?.image}}</td>
+                    </tr>
+                    <tr>
+                        <td>BINDING STYLE : {{imprints_data_arr.bindingStyle?.id}}</td>
+                        <td>{{imprints_data_arr.bindingStyle?.code}}</td>
+                        <td>{{imprints_data_arr.bindingStyle?.description}}</td>
+                        <td>{{imprints_data_arr.bindingStyle?.image}}</td>
+                    </tr>
+                    <tr>
+                        <td>SUBJECT GROUP : {{imprints_data_arr.subjectGroup?.id}}</td>
+                        <td>{{imprints_data_arr.subjectGroup?.code}}</td>
+                        <td>{{imprints_data_arr.subjectGroup?.description}}</td>
+                        <td>{{imprints_data_arr.subjectGroup?.image}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="series-and-bindings">
+        <h3 *ngIf="series_data">Series</h3>
+        <div *ngIf="series_data">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Code</th>
+                    <th>Subtitle</th>
+                    <th>Description</th>
+                </tr>
+                <tr *ngFor="let item of series_data_arr">
+                    <td>{{item.id}}</td>
+                    <td>{{item.code}}</td>
+                    <td>{{item.subtitle}}</td>
+                    <td>{{item.description}}</td>
+                </tr>
+            </table>
+            <hr>
+        </div>
+        <div *ngIf="series_data_empty">
+            <h3>No series data available.</h3>
+        </div>
+    </div>
+    <div class="version_type_data">
+
+        <h3 *ngIf="versiontype_data">Version Type</h3>
+        <div *ngIf="versiontype_data">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                </tr>
+                <tr *ngFor="let item of versiontype_data_arr">
+                    <td>{{item.id}}</td>
+                    <td>{{item.code}}</td>
+                    <td>{{item.description}}</td>
+                </tr>
+            </table>
+            <hr>
+        </div>
+        <div *ngIf="versiontype_data_empty">
+            <h3>No version type data available.</h3>
+        </div>
+    </div>
+    <div class="binding_style_data">
+        <h3 *ngIf="binding_style_data">Binding style</h3>
+        <div *ngIf="binding_style_data">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                </tr>
+                <tr *ngFor="let item of binding_style_data_arr">
+                    <td>{{item.id}}</td>
+                    <td>{{item.code}}</td>
+                    <td>{{item.description}}</td>
+                </tr>
+            </table>
+            <hr>
+        </div>
+        <div *ngIf="bindingstyle_data_empty">
+            <h3>No Binding style data available.</h3>
+        </div>
+    </div>
+    <div class="related_bindings_data">
+        <h3 *ngIf="related_bindings_data_flag">Related Bindings</h3>
+        <div *ngIf="related_bindings_data_flag">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Sku</th>
+                    <th>Isbn</th>
+                    <th>Version type</th>
+                    <th>binding style</th>
+                    <th>title</th>
+                </tr>
+                <tr *ngFor="let item of related_bindings_data_arr">
+                    <td><a (click)="fetchNewProductDataWithIsbn(item.isbn)">{{item.id}}</a></td>
+                    <td>{{item.isbn}}</td>
+                    <td>{{item.sku}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.versionType}}</td>
+                    <td>{{item.bindingStyle}}</td>
+                </tr>
+            </table>
+            <hr>
+        </div>
+        <div *ngIf="related_bindings_data_empty">
+            <h3>No related bindings available.</h3>
+        </div>
+    </div>
+    <div class="related_titles_data">
+        <h3 *ngIf="related_titles_data">Related titles</h3>
+        <div *ngIf="related_titles_data">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Sku</th>
+                    <th>Isbn</th>
+                    <th>Version type</th>
+                    <th>binding style</th>
+                    <th>title</th>
+                </tr>
+                <tr *ngFor="let item of related_titles_data_arr">
+                    <td><a (click)="fetchNewProductDataWithIsbn(item.isbn)">{{item.id}}</a></td>
+                    <td>{{item.isbn}}</td>
+                    <td>{{item.sku}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.versionType}}</td>
+                    <td>{{item.bindingStyle}}</td>
+                </tr>
+            </table>
+            <hr/>
+        </div>
+        <div *ngIf="related_titles_data_empty">
+            <h3>No related titles available.</h3>
+        </div>
+    </div>
+    <div class="pricing-and-discounts">
+        <div class="prices">
+            <h3 *ngIf="prices_data">Pricings</h3>
+            <div class="pricing" *ngIf="prices_data">
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Effective</th>
+                        <th>Expire</th>
+                        <th>Type Id</th>
+                        <th>Type</th>
+                        <th>List</th>
+                        <th>Real</th>
+                        <th>Iso</th>
+                        <th>Name</th>
+                    </tr>
+                    <tr *ngFor="let item of prices_data_arr">
+                        <td>{{item.id}}</td>
+                        <td>{{item.effectiveDate}}</td>
+                        <td>{{item.expirationDate}}</td>
+                        <td>{{item.priceTypeId}}</td>
+                        <td>{{item.code}}</td>
+                        <td>{{item.listPrice}}</td>
+                        <td>{{item.listPrice}}</td>
+                        <td>{{item.isoName}}</td>
+                        <td>{{item.name}}</td>
+                    </tr>
+               </table>
+            </div>
+            <div *ngIf="prices_data_empty">
+                <h3>No prices available.</h3>
+            </div>
+        </div>
+        <div class="discounts">
+            <h3 *ngIf="discounts_data">Discounts data</h3>
+            <div class="discounts" *ngIf="discounts_data">
+                <table>
+                    <tr>
+                        <td>Id</td>
+                        <td>Application Name</td>
+                        <td>Promocode</td>
+                        <td>Discount Name</td>
+                        <td>Description</td>
+                        <td>Startdate</td>
+                        <td>Enddate</td>
+                    </tr>
+                    <tr *ngFor="let item of dicounts_data_arr">
+                        <td>{{item.id}}</td>
+                        <td>{{item.applicationName}}</td>
+                        <td>{{item.promocode}}</td>
+                        <td>{{item.discountName}}</td>
+                        <td>{{item.description}}</td>
+                        <td>{{item.startDate}}</td>
+                        <td>{{item.endDate}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div *ngIf="discounts_data_empty">
+                <h3>No discounts data found.</h3>
+            </div>
+        </div>
+    </div>
+    <div class="originators_data">
+        <h3 *ngIf="originators_data">Originators data.</h3>
+        <div class="originators" *ngIf="originators_data">
+            <table>
+                <tr>
+                    <td>Id</td>
+                    <td>firstname</td>
+                    <td>lastname</td>
+                    <td>credentials</td>
+                    <td>affiliate</td>
+                    <td>salutation</td>
+                    <td>bio</td>
+                    <td>order</td>
+                    <td>role</td>
+                    <td>code</td>
+                </tr>
+                <tr *ngFor="let item of originators_data_arr">
+                    <td>{{item.id}}</td>
+                    <td>{{item.firstName}}</td>
+                    <td>{{item.lastName}}</td>
+                    <td>{{item.credentials}}</td>
+                    <td>{{item.affiliate}}</td>
+                    <td>{{item.salutation}}</td>
+                    <td>{{item.bio}}</td>
+                    <td>{{item.order}}</td>
+                    <td>{{item.role}}</td>
+                    <td>{{item.code}}</td>
+                </tr>
+            </table>
+        </div>
+        <div *ngIf="originators_data_empty">
+            <h3>Originators data.</h3>
+        </div>
+    </div>
+    <div class="resourcesData" *ngIf="resources_data">
+        <p>Currently in <b>{{resources_data_arr[0]}}</b> page</p>
+    </div>
+</div>
